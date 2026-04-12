@@ -15,8 +15,14 @@
     </form>
 
     {% for msg in chat_history %}
-        <p><b>{{ msg.username }}</b>: {{ msg.content }} <small>({{ msg.timestamp }})</small></p>
+        <div style="display:flex; align-items:center; gap:8px">
+            <p><b>{{ msg.username }}</b>: {{ msg.content }} <small>({{ msg.timestamp }})</small></p>
+            <form method="post">
+                <input type="hidden" name="delete_id" value="{{ msg.id }}">
+                <button type="submit" name="action" value="delete">Delete</button> 
+            </form>
+        </div>
     {% endfor %}
-    
+
 </body>
 </html>

@@ -17,18 +17,30 @@ with app.app_context():
 @app.route('/', methods=['POST', 'GET'])
 def chat():
     if request.method == 'POST': 
-        username = request.form['username']
-        content  = request.form['content']
+        if request.form.get('action') == 'delete':
+            msg_id = request.form.get('delete_id') # msg_id = 3
+            msg = Message.query.get(msg_id)  # SELECT * FROM message WHERE id = X;
+            if msg:
+                try:
+                    db.session.delete(msg)
+                    db.session.commit()
+                    return redirect(url_for('chat'))
+                except:
+                    db.session.rollback()
+                    return "There was an issue deleting the message. Maybe try again?"
+        else:          
+            username = request.form['username']
+            content  = request.form['content']
 
-        new_message = Message(username=username, content=content)
+            new_message = Message(username=username, content=content)
 
-        try: 
-            db.session.add(new_message)
-            db.session.commit()
-            return redirect(url_for('chat'))
-        except:
-            db.session.rollback()
-            return "There was an issue adding your message. Maybe try again?"
+            try: 
+                db.session.add(new_message)
+                db.session.commit()
+                return redirect(url_for('chat'))
+            except:
+                db.session.rollback()
+                return "There was an issue adding your message. Maybe try again?"
 
     messages = Message.query.order_by(Message.timestamp.desc()).all() # SELECT * FROM message ORDER BY timestamp DESC;
     return render_template('index.html', chat_history=messages)
