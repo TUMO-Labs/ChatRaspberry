@@ -3,26 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
+    <title>Flask Chat</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        
+   
+        header { background: #075e54; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        header a { color: #dcf8c6; text-decoration: none; font-weight: bold; }
+
+
+        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column-reverse; } 
+        
+        .message { background: white; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; max-width: 70%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); align-self: flex-start; }
+        .message.mine { align-self: flex-end; background: #dcf8c6; } 
+        
+        .username { display: block; font-weight: bold; font-size: 0.8em; color: #075e54; margin-bottom: 5px; }
+        .timestamp { display: block; font-size: 0.7em; color: #999; margin-top: 5px; text-align: right; }
+        .delete-btn { background: none; border: none; color: #ff4d4d; font-size: 0.7em; cursor: pointer; padding: 0; margin-top: 4px; display: block; text-align: right; }
+        .delete-btn:hover { background: none; color: #cc0000; }
+
+        footer { background: white; padding: 15px; border-top: 1px solid #ddd; }
+        form { display: flex; gap: 10px; max-width: 1000px; margin: 0 auto; }
+        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
+        button { background: #075e54; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #128c7e; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Online Chat!</h1>
-    <p>Start chatting with your friends now!</p>
-    <form method="post">
-        <input type="text" name="username" placeholder="Enter your username..." required>
-        <input type="text" name="content" placeholder="Type your message here..." required>
-        <button type="submit">Send</button>
-    </form>
 
+<header>
+    <span>Logged in as: <b>{{ current_user }}</b></span>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</header>
+
+<div id="chat-container">
     {% for msg in chat_history %}
-        <div style="display:flex; align-items:center; gap:8px">
-            <p><b>{{ msg.username }}</b>: {{ msg.content }} <small>({{ msg.timestamp }})</small></p>
-            <form method="post">
+        <div class="message {% if msg.username == current_user %}mine{% endif %}">
+            <span class="username">{{ msg.username }}</span>
+            {{ msg.content }}
+            <span class="timestamp">{{ msg.timestamp.strftime('%H:%M') }}</span>
+            {% if msg.username == current_user %}
+            <form method="post" style="margin:0">
                 <input type="hidden" name="delete_id" value="{{ msg.id }}">
-                <button type="submit" name="action" value="delete">Delete</button> 
+                <button type="submit" name="action" value="delete" class="delete-btn"> Delete</button>
             </form>
+            {% endif %}
         </div>
     {% endfor %}
+</div>
+
+<footer>
+    <form method="post">
+        <input type="text" name="content" placeholder="Write a message..." autocomplete="off" required>
+        <button type="submit">Send</button>
+    </form>
+</footer>
 
 </body>
 </html>
