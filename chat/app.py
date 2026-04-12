@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -25,11 +25,11 @@ def chat():
         try: 
             db.session.add(new_message)
             db.session.commit()
-            
+            return redirect(url_for('chat'))
         except:
             db.session.rollback()
             return "There was an issue adding your message. Maybe try again?"
-            
+
     messages = Message.query.order_by(Message.timestamp.desc()).all() # SELECT * FROM message ORDER BY timestamp DESC;
     return render_template('index.html', chat_history=messages)
 
