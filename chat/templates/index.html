@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+<body>
+    <h1>Welcome to Online Chat!</h1>
+    <p>Start chatting with your friends now!</p>
+    <form method="post">
+        <input type="text" name="username" placeholder="Enter your username..." required>
+        <input type="text" name="content" placeholder="Type your message here..." required>
+        <button type="submit">Send</button>
+    </form>
+
+    {% for msg in chat_history %}
+        <p><b>{{ msg.username }}</b>: {{ msg.content }} <small>({{ msg.timestamp }})</small></p>
+    {% endfor %}
+    
+</body>
+</html>
