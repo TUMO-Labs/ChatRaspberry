@@ -63,7 +63,7 @@ http://127.0.0.1:5000
 
 ## Database
 
-The app uses a single `message` table:
+The app uses a `message` table:
 
 | Column    | Type         | Description              |
 |-----------|--------------|--------------------------|
@@ -71,3 +71,17 @@ The app uses a single `message` table:
 | username  | String(50)   | Sender's name            |
 | content   | String(500)  | Message text             |
 | timestamp | DateTime     | Time the message was sent |
+
+The app also uses a  `user` table:
+
+| Column    | Type         | Description              |
+|-----------|--------------|--------------------------|
+| id        | Integer      | Auto-incremented primary key |
+| username  | String(50)   | Unique username          |
+| password  | String(200)  | Hashed password             |
+
+
+## Security
+
+- Passwords are stored securely using Werkzeug’s hashing functions.
+
