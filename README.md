@@ -1,6 +1,7 @@
 # ChatRaspberry
 
-A simple web-based chat application built with Flask and SQLite. Users can send messages with a username and view the full chat history on a single page.
+A simple web-based chat application built with **Flask** and **SQLite**.  
+It supports user registration, login, and real-time message posting with a persistent chat history.
 
 ## Tech Stack
 
@@ -18,7 +19,9 @@ ChatRaspberry/
 │   ├── requirements.txt     # Python dependencies
 │   ├── run.sh               # Setup and launch script
 │   └── templates/
-│       └── index.html       # Chat page (form + message history)
+│       ├── index.html       # Chat page (messages + form)
+│       ├── login.html       # Login page
+│       └── register.html    # Registration page
 └── README.md
 ```
 
@@ -49,11 +52,14 @@ The script will:
 http://127.0.0.1:5000
 ```
 
-## How It Works
+## Features
 
-- Visit the page → see all past messages
-- Enter a username and message → click **Send**
-- The message is saved to `instance/chat.db` (SQLite) and shown on the page
+- User Registration — Create an account with username & password
+- Login/Logout — Secure authentication with hashed passwords
+- Chat Room — Send and view messages in a shared space
+- Message History — Persistent storage in SQLite
+- Timestamps — Each message includes the time it was sent
+- Responsive UI — Styled with modern CSS for a clean look
 
 ## Database
 
