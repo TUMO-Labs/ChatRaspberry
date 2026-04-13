@@ -19,6 +19,8 @@
         
         .username { display: block; font-weight: bold; font-size: 0.8em; color: #075e54; margin-bottom: 5px; }
         .timestamp { display: block; font-size: 0.7em; color: #999; margin-top: 5px; text-align: right; }
+        .delete-btn { background: none; border: none; color: #ff4d4d; font-size: 0.7em; cursor: pointer; padding: 0; margin-top: 4px; display: block; text-align: right; }
+        .delete-btn:hover { background: none; color: #cc0000; }
 
         footer { background: white; padding: 15px; border-top: 1px solid #ddd; }
         form { display: flex; gap: 10px; max-width: 1000px; margin: 0 auto; }
@@ -40,6 +42,12 @@
             <span class="username">{{ msg.username }}</span>
             {{ msg.content }}
             <span class="timestamp">{{ msg.timestamp.strftime('%H:%M') }}</span>
+            {% if msg.username == current_user %}
+            <form method="post" style="margin:0">
+                <input type="hidden" name="delete_id" value="{{ msg.id }}">
+                <button type="submit" name="action" value="delete" class="delete-btn"> Delete</button>
+            </form>
+            {% endif %}
         </div>
     {% endfor %}
 </div>

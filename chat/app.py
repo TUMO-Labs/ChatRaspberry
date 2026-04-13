@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat.db'
-app.config['SECRET_KEY'] = 'admin' 
+app.config['SECRET_KEY'] = 'your_secret_key_here' 
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -46,7 +46,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first() # SELECT * FROM user WHERE username = 'test' LIMIT 1;
 
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
@@ -63,16 +63,28 @@ def chat():
         return redirect(url_for('login'))
 
     if request.method == 'POST': 
-        content = request.form['content']
-        new_message = Message(username=session['username'], content=content)
-
-        try: 
-            db.session.add(new_message)
-            db.session.commit()
-            return redirect(url_for('chat'))
-        except:
-            db.session.rollback()
-            return "Issue sending message."
+        if request.form.get('action') == 'delete':
+            msg_id = request.form.get('delete_id') # msg_id = 3
+            msg = Message.query.get(msg_id)  # SELECT * FROM message WHERE id = X;
+            if msg:
+                try:
+                    db.session.delete(msg)
+                    db.session.commit()
+                    return redirect(url_for('chat'))
+                except:
+                    db.session.rollback()
+                    return "There was an issue deleting the message. Maybe try again?"
+        else:          
+            content = request.form['content']
+            hashed_content = generate_password_hash(content)
+            new_message = Message(username=session['username'], content=hashed_content)
+            try: 
+                db.session.add(new_message)
+                db.session.commit()
+                return redirect(url_for('chat'))
+            except:
+                db.session.rollback()
+                return "Issue sending message."
 
     messages = Message.query.order_by(Message.timestamp.desc()).all()
     return render_template('index.html', chat_history=messages, current_user=session['username'])
