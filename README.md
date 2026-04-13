@@ -18,7 +18,6 @@ ChatRaspberry/
 ├── chat/
 │   ├── app.py               # Flask app, routes, and database models
 │   ├── requirements.txt     # Python dependencies
-│   ├── run.sh               # Setup and launch script
 │   └── templates/
 │       ├── register.html    # Registration page
 │       ├── login.html       # Login page
@@ -44,6 +43,7 @@ cd ChatRaspberry
 chmod +x ./run.sh
 ./run.sh
 ```
+Be aware that some commands require root access.
 
 The script will:
 - Install **Python 3** if not found (via `apt`)
@@ -64,14 +64,14 @@ nginx listens on port **80** and forwards requests to Flask on port **5000**, so
 
 > For local development, access Flask directly at `http://127.0.0.1:5000`
 
-## How It Works
+## Features
 
-1. Visit `/register` → create an account (username + password, stored hashed)
-2. Visit `/login` → log in with your credentials
-3. Visit `/` → see all past messages (newest first)
-4. Type a message → click **Send** → saved to DB under your username
-5. Click **Delete** on your own messages → removed from DB
-6. Click **Logout** → session cleared, redirected to login
+- User Registration — Create an account with username & password
+- Login/Logout — Secure authentication with hashed passwords
+- Chat Room — Send and view messages in a shared space
+- Message History — Persistent storage in SQLite
+- Timestamps — Each message includes the time it was sent
+- Responsive UI — Styled with modern CSS for a clean look
 
 > Only your own messages show the Delete button.
 
