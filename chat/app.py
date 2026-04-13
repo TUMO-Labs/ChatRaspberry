@@ -46,7 +46,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first() # SELECT * FROM user WHERE username = 'test' LIMIT 1;
 
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
@@ -76,7 +76,8 @@ def chat():
                     return "There was an issue deleting the message. Maybe try again?"
         else:          
             content = request.form['content']
-            new_message = Message(username=session['username'], content=content)
+            hashed_content = generate_password_hash(content)
+            new_message = Message(username=session['username'], content=hashed_content)
             try: 
                 db.session.add(new_message)
                 db.session.commit()

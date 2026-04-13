@@ -1,6 +1,7 @@
 # ChatRaspberry
 
-A web-based chat application built with Flask and SQLite. Users can register, log in, send messages, and delete their own messages.
+A simple web-based chat application built with **Flask** and **SQLite**.  
+It supports user registration, login, and real-time message posting with a persistent chat history.
 
 ## Tech Stack
 
@@ -103,3 +104,37 @@ The app uses two tables stored at `chat/instance/chat.db`:
 | username  | String(50)  | Sender's username             |
 | content   | String(500) | Message text                  |
 | timestamp | DateTime    | Time the message was sent     |
+
+## Features
+
+- User Registration — Create an account with username & password
+- Login/Logout — Secure authentication with hashed passwords
+- Chat Room — Send and view messages in a shared space
+- Message History — Persistent storage in SQLite
+- Timestamps — Each message includes the time it was sent
+- Responsive UI — Styled with modern CSS for a clean look
+
+## Database
+
+The app uses a `message` table:
+
+| Column    | Type         | Description              |
+|-----------|--------------|--------------------------|
+| id        | Integer      | Auto-incremented primary key |
+| username  | String(50)   | Sender's name            |
+| content   | String(500)  | Message text             |
+| timestamp | DateTime     | Time the message was sent |
+
+The app also uses a  `user` table:
+
+| Column    | Type         | Description              |
+|-----------|--------------|--------------------------|
+| id        | Integer      | Auto-incremented primary key |
+| username  | String(50)   | Unique username          |
+| password  | String(200)  | Hashed password             |
+
+
+## Security
+
+- Passwords are stored securely using Werkzeug’s hashing functions.
+
