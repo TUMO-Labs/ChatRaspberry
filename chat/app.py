@@ -76,8 +76,7 @@ def chat():
                     return "There was an issue deleting the message. Maybe try again?"
         else:          
             content = request.form['content']
-            hashed_content = generate_password_hash(content)
-            new_message = Message(username=session['username'], content=hashed_content)
+            new_message = Message(username=session['username'], content=content)
             try: 
                 db.session.add(new_message)
                 db.session.commit()
