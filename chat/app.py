@@ -49,6 +49,7 @@ def login():
         user = User.query.filter_by(username=username).first() # SELECT * FROM user WHERE username = 'test' LIMIT 1;
 
         if user and check_password_hash(user.password, password):
+            session.clear()
             session['user_id'] = user.id
             session['username'] = user.username
             return redirect(url_for('chat'))
