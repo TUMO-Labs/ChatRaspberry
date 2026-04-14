@@ -34,9 +34,9 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))
-        except:
+        except Exception as e:
             db.session.rollback()
-            return "Username already exists!"
+            return f"Error: {str(e)}"
             
     return render_template('register.html')
 
