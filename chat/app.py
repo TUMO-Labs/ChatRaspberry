@@ -1,10 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from cryptography.fernet import Fernet
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat.db'
-app.config['SECRET_KEY'] = 'admin' 
+app.config['SECRET_KEY'] = 'admin'
+
+KEY_FILE = os.path.join(os.path.dirname(__file__), 'secret.key')
+if os.path.exists(KEY_FILE):
+    with open(KEY_FILE, 'rb') as f:
+        fernet = Fernet(f.read())
+else:
+    key = Fernet.generate_key()
+    with open(KEY_FILE, 'wb') as f:
+        f.write(key)
+    fernet = Fernet(key)
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -15,7 +27,7 @@ class User(db.Model):
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False)
-    content  = db.Column(db.String(500), nullable=False) 
+    content  = db.Column(db.String(1000), nullable=False) 
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 with app.app_context():
@@ -77,7 +89,8 @@ def chat():
                     return "There was an issue deleting the message. Maybe try again?"
         else:          
             content = request.form['content']
-            new_message = Message(username=session['username'], content=content)
+            encrypted = fernet.encrypt(content.encode()).decode()
+            new_message = Message(username=session['username'], content=encrypted)
             try: 
                 db.session.add(new_message)
                 db.session.commit()
@@ -87,6 +100,8 @@ def chat():
                 return "Issue sending message."
 
     messages = Message.query.order_by(Message.timestamp.desc()).all()
+    for msg in messages:
+        msg.content = fernet.decrypt(msg.content.encode()).decode()
     return render_template('index.html', chat_history=messages, current_user=session['username'])
 
 @app.route('/logout')
