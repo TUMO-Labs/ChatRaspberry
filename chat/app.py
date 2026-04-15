@@ -48,7 +48,7 @@ def register():
             return redirect(url_for('login'))
         except Exception as e:
             db.session.rollback()
-            return f"Error: {str(e)}"
+            return "Username already exists. Please choose a different one."
             
     return render_template('register.html')
 
