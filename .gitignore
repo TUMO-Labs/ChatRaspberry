@@ -1,3 +1,4 @@
 instance
 chat/venv/
 venv
+secret.key
