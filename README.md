@@ -84,35 +84,6 @@ nginx listens on port **80** and forwards requests to Flask on port **5000**, so
 | `/` | GET, POST | Chat page (send & delete messages) |
 | `/logout` | GET | Clear session and redirect to login |
 
-## Database
-
-The app uses two tables stored at `chat/instance/chat.db`:
-
-**`user`**
-
-| Column   | Type        | Description                  |
-|----------|-------------|------------------------------|
-| id       | Integer     | Auto-incremented primary key |
-| username | String(50)  | Unique username              |
-| password | String(200) | Hashed password              |
-
-**`message`**
-
-| Column    | Type        | Description                   |
-|-----------|-------------|-------------------------------|
-| id        | Integer     | Auto-incremented primary key  |
-| username  | String(50)  | Sender's username             |
-| content   | String(500) | Message text                  |
-| timestamp | DateTime    | Time the message was sent     |
-
-## Features
-
-- User Registration — Create an account with username & password
-- Login/Logout — Secure authentication with hashed passwords
-- Chat Room — Send and view messages in a shared space
-- Message History — Persistent storage in SQLite
-- Timestamps — Each message includes the time it was sent
-- Responsive UI — Styled with modern CSS for a clean look
 
 ## Database
 
