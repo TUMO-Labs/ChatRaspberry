@@ -27,6 +27,10 @@ sudo systemctl restart nginx
 # -- Setup Flask app --
 python3 -m venv chat/venv/
 source chat/venv/bin/activate
-
 pip3 install -r chat/requirements.txt
-cd chat && flask run --host=127.0.0.1 --port=5000
+
+# -- Setup systemd service --
+sudo cp chat.service /etc/systemd/system/chat.service
+sudo systemctl daemon-reload
+sudo systemctl enable chat
+sudo systemctl restart chat

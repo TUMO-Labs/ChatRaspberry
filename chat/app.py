@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat.db'
 app.config['SECRET_KEY'] = 'admin'
-socketio = SocketIO(app, cors_allowed_origins='*')
+socketio = SocketIO(app, cors_allowed_origins='*', async_mode='threading')
 
 KEY_FILE = os.path.join(os.path.dirname(__file__), 'secret.key')
 if os.path.exists(KEY_FILE):

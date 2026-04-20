@@ -1,0 +1,15 @@
+[Unit]
+Description=ChatRaspberry Flask App
+After=network.target
+
+[Service]
+User=raspberry
+Group=raspberry
+WorkingDirectory=/home/raspberry/ChatRaspberry/chat
+ExecStart=/home/raspberry/ChatRaspberry/chat/venv/bin/gunicorn --worker-class gthread --workers 1 --threads 4 --bind 127.0.0.1:5000 app:app
+Restart=always
+RestartSec=5
+
+
+[Install]
+WantedBy=multi-user.target
