@@ -53,11 +53,41 @@
 </div>
 
 <footer>
-    <form method="post">
-        <input type="text" name="content" placeholder="Write a message..." autocomplete="off" required>
-        <button type="submit">Send</button>
-    </form>
+    <div style="display:flex; gap:10px; max-width:1000px; margin:0 auto;">
+        <input type="text" id="msg-input" placeholder="Write a message..." autocomplete="off">
+        <button onclick="sendMessage()">Send</button>
+    </div>
 </footer>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+    const socket = io({ transports: ['websocket', 'polling'] });
+    const currentUser = "{{ current_user }}";
+
+    socket.on('new_message', (data) => {
+        const container = document.getElementById('chat-container');
+        const div = document.createElement('div');
+        div.className = 'message' + (data.username === currentUser ? ' mine' : '');
+        div.innerHTML = `
+            <span class="username">${data.username}</span>
+            ${data.message}
+            <span class="timestamp">${data.timestamp}</span>
+        `;
+        container.prepend(div);
+    });
+
+    function sendMessage() {
+        const input = document.getElementById('msg-input');
+        const content = input.value.trim();
+        if (!content) return;
+        socket.emit('send_message', { content: content });
+        input.value = '';
+    }
+
+    document.getElementById('msg-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
 
 </body>
 </html>

@@ -29,4 +29,4 @@ python3 -m venv chat/venv/
 source chat/venv/bin/activate
 
 pip3 install -r chat/requirements.txt
-python3 chat/app.py
+cd chat && flask run --host=127.0.0.1 --port=5000

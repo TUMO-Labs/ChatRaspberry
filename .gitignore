@@ -2,3 +2,4 @@ instance
 chat/venv/
 venv
 secret.key
+__pycache__/
